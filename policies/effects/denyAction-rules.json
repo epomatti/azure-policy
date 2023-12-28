@@ -1,0 +1,25 @@
+{
+  "if": {
+    "allOf": [
+      {
+        "field": "type",
+        "equals": "Microsoft.Storage/storageAccounts"
+      },
+      {
+        "field": "tags.environment",
+        "equals": "prod"
+      }
+    ]
+  },
+  "then": {
+    "effect": "denyAction",
+    "details": {
+      "actionNames": [
+        "delete"
+      ],
+      "cascadeBehaviors": {
+        "resourceGroup": "deny"
+      }
+    }
+  }
+}

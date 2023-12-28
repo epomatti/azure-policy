@@ -75,7 +75,7 @@ When creating a policy, identify the correct [Resource Provider mode][1]:
 > - `indexed`: only evaluate resource types that support tags and location
 
 
-### Append
+### `Append`
 
 Create the policy and assign the policy:
 
@@ -103,7 +103,7 @@ az storage account create \
     --tags PolicySandbox
 ```
 
-### Audit
+### `Audit`
 
 Audit effect sample:
 
@@ -116,7 +116,7 @@ az policy assignment create -n AuditSample --policy AuditSample \
     --enforcement-mode Default
 ```
 
-### AuditIfNotExists
+### `AuditIfNotExists`
 
 ```sh
 az vm create \
@@ -141,7 +141,7 @@ az policy assignment create -n AuditIfNotExistsSample --policy AuditIfNotExistsS
     --enforcement-mode Default
 ```
 
-### Deny
+### `Deny`
 
 Set the `Deny` policy:
 
@@ -165,6 +165,30 @@ az storage account create \
     --allow-blob-public-access false
 ```
 
+### `DenyAction`
+
+Set the `DenyAction` policy:
+
+```sh
+az policy definition create --name DenyActionSample \
+    --rules @policies/effects/denyAction-rules.json
+
+az policy assignment create -n DenyActionSample --policy DenyActionSample \
+    --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
+    --enforcement-mode Default
+```
+
+Create the storage, or tag one existing with a `environment=prod` tag:
+
+```sh
+az storage account create \
+    --name sandbox \
+    --resource-group rg-policy-sandbox \
+    --location brazilsouth \
+    --sku Standard_LRS \
+    --allow-blob-public-access false \
+    --tags environment=prod
+```
 
 
 [1]: https://learn.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#resource-manager-modes
