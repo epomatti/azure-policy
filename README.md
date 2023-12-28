@@ -116,5 +116,30 @@ az policy assignment create -n AuditSample --policy AuditSample \
     --enforcement-mode Default
 ```
 
+### AuditIfNotExists
+
+```sh
+az vm create \
+  --resource-group rg-policy-sandbox \
+  --location brazilsouth \
+  --name vm-debian \
+  --image Debian11 \
+  --admin-username debianadmin \
+  --generate-ssh-keys \
+  --public-ip-sku Standard \
+  --size Standard_B1s
+```
+
+Set the policy:
+
+```sh
+az policy definition create --name AuditIfNotExistsSample \
+    --rules @policies/effects/auditIfNotExists-rules.json
+
+az policy assignment create -n AuditIfNotExistsSample --policy AuditIfNotExistsSample \
+    --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
+    --enforcement-mode Default
+```
+
 
 [1]: https://learn.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#resource-manager-modes
