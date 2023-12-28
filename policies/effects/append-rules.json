@@ -1,0 +1,26 @@
+{
+	"if": {
+		"allOf": [
+			{
+				"field": "type",
+				"equals": "Microsoft.Storage"
+			},
+			{
+				"field": "tags['PolicySandbox']",
+				"exists": "true"
+			}
+		]
+	},
+	"then": {
+		"effect": "append",
+		"details": [
+			{
+				"field": "Microsoft.Storage/storageAccounts/networkAcls.ipRules[*]",
+				"value": {
+					"value": "[parameters('allowedIpAddress')]",
+					"action": "Allow"
+				}
+			}
+		]
+	}
+}

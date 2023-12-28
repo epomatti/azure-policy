@@ -1,0 +1,10 @@
+{
+  "allowedIpAddress": {
+    "type": "String",
+    "metadata": {
+      "description": "The IP address to allow as IP rule for the Storage Account.",
+      "displayName": "Allowed IP address"
+    },
+    "defaultValue": "0.0.0.0/0"
+  }
+}
