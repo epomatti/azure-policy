@@ -3,7 +3,7 @@
 		"allOf": [
 			{
 				"field": "type",
-				"equals": "Microsoft.Storage"
+				"equals": "Microsoft.Storage/storageAccounts"
 			},
 			{
 				"field": "tags['PolicySandbox']",

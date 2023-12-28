@@ -49,11 +49,19 @@ Create the base resource group:
 az group create -n rg-policy-sandbox -l brazilsouth
 ```
 
+To force a policy scan:
+
+```sh
+az policy state trigger-scan --resource-group "rg-policy-sandbox"
+```
+
+Load the subscription id for the following commands.
+
 ```sh
 subscriptionId=$(az account show --query id -o tsv)
 ```
 
-This example will demonstrate several policy effects
+Get your public IP in case of customization of parameters:
 
 ```sh
 curl ipinfo.io/ip
@@ -66,7 +74,22 @@ When creating a policy, identify the correct [Resource Provider mode][1]:
 > - `all`: evaluate resource groups, subscriptions, and all resource types
 > - `indexed`: only evaluate resource types that support tags and location
 
-Base storage creation sample:
+
+### Append
+
+Create the policy and assign the policy:
+
+```sh
+az policy definition create --name AppendSample \
+    --rules @policies/effects/append-rules.json \
+    --params @policies/effects/append-params.json
+
+az policy assignment create -n AppendRuleToStorage --policy AppendSample \
+    --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
+    --enforcement-mode Default
+```
+
+Create the storage account:
 
 ```sh
 az storage account create \
@@ -80,19 +103,18 @@ az storage account create \
     --tags PolicySandbox
 ```
 
-### Append
+### Audit
 
-Create the policy:
+Audit effect sample:
 
 ```sh
-az policy definition create --name AppendSample --rules @policies/effects/append.json
+az policy definition create --name AuditSample \
+    --rules @policies/effects/audit-rules.json
 
-az policy assignment create -n AppendRuleToStorage --policy FullSample \
+az policy assignment create -n AuditSample --policy AuditSample \
     --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
     --enforcement-mode Default
 ```
-
-
 
 
 [1]: https://learn.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#resource-manager-modes
