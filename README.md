@@ -141,5 +141,30 @@ az policy assignment create -n AuditIfNotExistsSample --policy AuditIfNotExistsS
     --enforcement-mode Default
 ```
 
+### Deny
+
+Set the `Deny` policy:
+
+```sh
+az policy definition create --name DenySample \
+    --rules @policies/effects/deny-rules.json
+
+az policy assignment create -n DenySample --policy DenySample \
+    --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
+    --enforcement-mode Default
+```
+
+Try to create the storage. This command should be denied by the policy:
+
+```sh
+az storage account create \
+    --name sandbox \
+    --resource-group rg-policy-sandbox \
+    --location brazilsouth \
+    --sku Standard_LRS \
+    --allow-blob-public-access false
+```
+
+
 
 [1]: https://learn.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#resource-manager-modes
