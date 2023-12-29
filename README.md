@@ -1,6 +1,6 @@
 # Azure Policy
 
-Implementing governance of resources with Azure Policy.
+Implementing governance of resources with Azure Policy. Several Policy samples can be found in the [Azure/Community-Policy][2] repository.
 
 Create the baseline resources:
 
@@ -190,5 +190,34 @@ az storage account create \
     --tags environment=prod
 ```
 
+### `DeployIfNotExists`
+
+Copied from the [functionapp-enforce-https-only-dine][3] sample.
+
+```sh
+az policy definition create --name DeployIfNotExistsSample \
+    --rules @policies/effects/DeployIfNotExists-rules.json \
+    --params @policies/effects/DeployIfNotExists-params.json
+
+az policy assignment create -n DeployIfNotExistsSample --policy DeployIfNotExistsSample \
+    --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
+    --enforcement-mode Default \
+    --mi-system-assigned \
+    --location brazilsouth
+```
+
+Create the function and check that HTTPS Only will be set to `true` after the deployment is complete.
+
+```sh
+az functionapp create -n funcappdeploypolicy -g rg-policy-sandbox \
+    --storage-account <some storage> \
+    --consumption-plan-location brazilsouth \
+    --runtime dotnet \
+    --functions-version 4 \
+    --https-only false
+```
+
 
 [1]: https://learn.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#resource-manager-modes
+[2]: https://github.com/Azure/Community-Policy
+[3]: https://github.com/Azure/Community-Policy/blob/53c5f27699d149eeb2f554e7f62b2dd6b5ce1817/Policies/App%20Service/functionapp-enforce-https-only-dine/azurepolicy.json
