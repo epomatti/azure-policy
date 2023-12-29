@@ -217,6 +217,31 @@ az functionapp create -n funcappdeploypolicy -g rg-policy-sandbox \
     --https-only false
 ```
 
+### `Disabled`
+
+Set the `Disabled` policy:
+
+```sh
+az policy definition create --name DisabledActionSample \
+    --rules @policies/effects/disabled.rules.json \
+    --params @policies/effects/disabled.params.json
+
+az policy assignment create -n DisabledActionSample --policy DisabledActionSample \
+    --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
+    --params "{ \"effect\": { \"value\": \"Disabled\" } }" \
+    --enforcement-mode Default
+```
+
+Create the storage, or tag one existing with a `environment=prod` tag:
+
+```sh
+az storage account create \
+    --name sandbox \
+    --resource-group rg-policy-sandbox \
+    --location brazilsouth \
+    --sku Standard_LRS \
+    --tags TriggerDisabledEffect=true
+```
 
 [1]: https://learn.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#resource-manager-modes
 [2]: https://github.com/Azure/Community-Policy
