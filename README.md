@@ -243,6 +243,31 @@ az storage account create \
     --tags TriggerDisabledEffect=true
 ```
 
+### `Modify`
+
+Create the policy:
+
+```sh
+az policy definition create --name ModifySample \
+    --rules @policies/effects/modify.rules.json
+
+az policy assignment create -n ModifySample --policy ModifySample \
+    --scope "/subscriptions/$subscriptionId/resourceGroups/rg-policy-sandbox" \
+    --enforcement-mode Default \
+    --mi-system-assigned \
+    --location brazilsouth
+```
+
+Create a Storage resource to test the policy:
+
+```sh
+az storage account create \
+    --name sandbox \
+    --resource-group rg-policy-sandbox \
+    --location brazilsouth \
+    --sku Standard_LRS
+```
+
 [1]: https://learn.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#resource-manager-modes
 [2]: https://github.com/Azure/Community-Policy
 [3]: https://github.com/Azure/Community-Policy/blob/53c5f27699d149eeb2f554e7f62b2dd6b5ce1817/Policies/App%20Service/functionapp-enforce-https-only-dine/azurepolicy.json
