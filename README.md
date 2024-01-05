@@ -49,7 +49,7 @@ Create the base resource group:
 az group create -n rg-policy-sandbox -l brazilsouth
 ```
 
-To force a policy scan:
+To force/refresh a policy scan:
 
 ```sh
 az policy state trigger-scan --resource-group "rg-policy-sandbox"
